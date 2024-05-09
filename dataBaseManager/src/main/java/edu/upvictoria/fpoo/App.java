@@ -1,13 +1,19 @@
 package edu.upvictoria.fpoo;
 
-/**
- * Hello world!
- *
- */
-public class App 
+public class App
 {
+
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        IdentificaComando identificaComando = new IdentificaComando();
+
+        do {
+            if (identificaComando.separaPorInstruccion(identificaComando.solicitaInstruccion())){
+                System.out.println("Muy bien");
+                identificaComando.imprimePartes();
+                identificaComando.delegarResponsabilidad();
+            }
+            System.out.println();
+        } while (true);
     }
 }
