@@ -16,6 +16,12 @@ public class IdentificaComando {
         String instruccion = "";
 
         try {
+            if (path == null){
+                System.out.println("PATH: Sin seleccionar");
+            } else {
+                System.out.println("PATH: " + path);
+            }
+
             System.out.println("Instrucción:");
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -31,18 +37,19 @@ public class IdentificaComando {
         } catch (RuntimeException e){
             System.out.println("Parece que ocurrió algo en plena ejecución...");
         } catch (IOException e){
-            System.out.println("Parece que ocurrió algo con la entrada/salida...");
+
         }
         return instruccion;
     }
 
 
     public boolean separaPorInstruccion(String instruccion) {
-        partes = new String[14];
+        partes = new String[15];
 
         String[] comandosSQL = {
-                "USE",
-                "CREATE TABLE",
+                "USE ",
+                "CREATE TABLE ",
+                "DROP TABLE ",
                 "INSERT ",
                 "UPDATE ",
                 "DELETE ",
@@ -70,7 +77,7 @@ public class IdentificaComando {
                         System.out.println("Instrucción mal elaborada, vuelva a intentar");
                         return false;
                     } else {
-                        if (i == 13) {
+                        if (i == 14) {
                             partes[i] = instruccion.substring(inicioComando).trim();
                         } else {
                             partes[i] = instruccion.substring(inicioComando + comando.length()).trim();
@@ -82,7 +89,7 @@ public class IdentificaComando {
                 }
             }
 
-            if (!instruccion.isEmpty() || !partes[13].equals(";") || !sintaxisCorrecta()) {
+            if (!instruccion.isEmpty() || !partes[14].equals(";") || !sintaxisCorrecta()) {
                 System.out.println("Instrucción mal elaborada, vuelva a intentar");
                 return false;
             }
@@ -133,23 +140,23 @@ public class IdentificaComando {
             }
         }
 
-        if (partes[5] != null) {
+        if (partes[6] != null) {
             if (!unicoComando(6)) {
                 return false;
             }
 
-            if (!partes[5].isEmpty()) {
+            if (!partes[6].isEmpty()) {
                 return false;
             }
         }
 
-        if (partes[6] != null) {
-            if (partes[7] == null) {
+        if (partes[7] != null) {
+            if (partes[8] == null) {
                 return false;
             }
         }
 
-        if (partes[13] != null){
+        if (partes[14] != null){
             int contador = 0;
             for (int i = 0; i < partes.length-1; i++) {
                 if (partes[i] != null){
@@ -181,8 +188,8 @@ public class IdentificaComando {
             if (partes[1] != null) {
                 creador = new Creador(partes[1]);
 
-                if (creador.creaTabla()) {
-                    System.out.println("Se crea la tabla");
+                if (creador.creaTabla(path)) {
+                    System.out.println("La tabla ha sido creada exitosamente");
                 }else {
                     System.out.println("Instrucción mal elaborada, vuelva a intentar");
                 }

@@ -1,15 +1,16 @@
 package edu.upvictoria.fpoo;
 
-//import java.util.ArrayList;
-//import java.io.File;
-//import java.io.BufferedWriter;
-//import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Creador {
     private String instruccion;
     private String nombre;
     private String[] columnas;
-    private String[][] tabla;
+    private ArrayList<ArrayList<String>> tabla;
     private final String[] tipoDato = {
             " CHAR",
             " DATE",
@@ -22,7 +23,7 @@ public class Creador {
         this.instruccion = instruccion;
     }
 
-    public boolean creaTabla() {
+    public boolean creaTabla(File path) {
         int inicioColumn = instruccion.indexOf("(");
         int finColumn = instruccion.lastIndexOf(")");
         nombre = instruccion.substring(0, inicioColumn).trim();
@@ -45,20 +46,22 @@ public class Creador {
                 return false;
             }
 
-            tabla = new String[1][this.columnas.length];
-            columnasTabla();
+            tabla = new ArrayList<>();
 
-            for (int i = 0; i < this.columnas.length; i++){
-                for (int j = 0; j < this.columnas[i].length(); j++){
-                    System.out.println(tabla[i][j]);
-                }
+            for (String s : this.columnas) {
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(s);
+                tabla.add(columna);
             }
+
+            return crearCsv(path);
+
         } catch (NullPointerException e){
             System.out.println("La instruccion no puede estar vacía");
             return false;
         } catch (IndexOutOfBoundsException e){
             System.out.println("Hay problemas con el index de la tabla, vuelve a intentar");
-        } catch (Exception e){
+        } catch (RuntimeException e){
             System.out.println("Parece que ocurrió algo en plena ejecución...");
         }
 
@@ -113,11 +116,30 @@ public class Creador {
         return true;
     }
 
-    public void columnasTabla(){
-        for (int i = 0; i < this.columnas.length; i++) {
-            this.tabla[0][i] = this.columnas[i];
+    public boolean crearCsv(File path){
+        String ruta = path.getPath() + "/" + nombre + ".csv";
+        File file = new File(ruta);
+
+        if (file.exists()){
+            System.out.println("No es posible crear una tabla ya existente");
+            return false;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta))) {
+
+            for (ArrayList<String> fila : tabla) {
+                for (String columna : fila) {
+                    bw.write(columna + ",");
+                }
+            }
+            return true;
+
+        } catch (NullPointerException e){
+            throw new NullPointerException();
+
+        } catch (IOException e) {
+            System.out.println("Parece que ocurrió algo con la entrada/salida...");
+            return false;
         }
     }
-
-
 }
