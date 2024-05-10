@@ -9,7 +9,6 @@ public class App
 
         do {
             if (identificaComando.separaPorInstruccion(identificaComando.solicitaInstruccion())){
-                System.out.println("Muy bien");
                 identificaComando.imprimePartes();
                 identificaComando.delegarResponsabilidad();
             }

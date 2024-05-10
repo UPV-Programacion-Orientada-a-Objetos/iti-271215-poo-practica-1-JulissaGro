@@ -13,10 +13,23 @@ public class AdministradorCarpeta {
     public File abreCarpeta(){
         File baseDatos = new File(path);
 
-        if (!baseDatos.exists()) {
-            System.out.println("La carpeta no existe");
+        if (!baseDatos.exists() || !baseDatos.isDirectory() || !baseDatos.canWrite() || !baseDatos.canRead()) {
+            return null;
         }
-
         return baseDatos;
+    }
+
+    public void muestraContenido(File baseDatos){
+        try{
+            for (File file : baseDatos.listFiles()) {
+                if (file.getName().endsWith(".csv")) {
+                    System.out.println("- " + file.getName());
+                }
+            }
+        }catch (NullPointerException e){
+            System.out.println("La base de datos no cuenta con tablas");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
