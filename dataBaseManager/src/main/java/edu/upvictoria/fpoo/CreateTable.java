@@ -16,7 +16,11 @@ public class Creador {
             " DATE",
             " VARCHAR(",
             " NUMBER",
-            " VARCHAR2("
+            " VARCHAR2(",
+            " INT",
+            " FLOAT",
+            " BLOB",
+            " CLOB"
     };
 
     public Creador(String instruccion){
@@ -33,12 +37,12 @@ public class Creador {
         }
 
         try {
-            instruccion = instruccion.substring(inicioColumn + 1, finColumn - 1).trim();
+            instruccion = instruccion.substring(inicioColumn + 1, finColumn).trim();
         } catch (StringIndexOutOfBoundsException e){
             System.out.println("No es posible crear una tabla sin columnas");
             return false;
         } catch (RuntimeException e){
-            System.out.println("Parece que ocurrió algo en plena ejecución...");
+            System.out.println("Algo inesperado ha ocurrido");
         }
 
         try{
@@ -62,9 +66,10 @@ public class Creador {
         } catch (IndexOutOfBoundsException e){
             System.out.println("Hay problemas con el index de la tabla, vuelve a intentar");
         } catch (RuntimeException e){
-            System.out.println("Parece que ocurrió algo en plena ejecución...");
+            System.out.println("Algo inesperado ha ocurrido");
         }
 
+        System.out.println("La tabla ha sido creada exitosamente");
         return true;
     }
 
@@ -112,7 +117,6 @@ public class Creador {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -121,7 +125,7 @@ public class Creador {
         File file = new File(ruta);
 
         if (file.exists()){
-            System.out.println("No es posible crear una tabla ya existente");
+            System.out.println("Tabla ya existente");
             return false;
         }
 
@@ -138,7 +142,7 @@ public class Creador {
             throw new NullPointerException();
 
         } catch (IOException e) {
-            System.out.println("Parece que ocurrió algo con la entrada/salida...");
+            System.out.println("Algo inesperado ha ocurrido");
             return false;
         }
     }

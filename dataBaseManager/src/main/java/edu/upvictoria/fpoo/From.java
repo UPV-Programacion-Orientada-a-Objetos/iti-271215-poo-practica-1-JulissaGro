@@ -1,4 +1,4 @@
 package edu.upvictoria.fpoo;
 
-public class Eliminador {
+public class From {
 }
